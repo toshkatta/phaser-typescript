@@ -1,0 +1,6 @@
+D:\Code\PhaserTutorial\PhaserTutorial\bin\PhaserTutorial.dll.config
+D:\Code\PhaserTutorial\PhaserTutorial\bin\PhaserTutorial.dll
+D:\Code\PhaserTutorial\PhaserTutorial\bin\PhaserTutorial.pdb
+D:\Code\PhaserTutorial\PhaserTutorial\obj\Debug\PhaserTutorial.csprojResolveAssemblyReference.cache
+D:\Code\PhaserTutorial\PhaserTutorial\obj\Debug\PhaserTutorial.dll
+D:\Code\PhaserTutorial\PhaserTutorial\obj\Debug\PhaserTutorial.pdb
