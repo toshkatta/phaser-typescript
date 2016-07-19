@@ -1,12 +1,12 @@
 var SimpleGame = (function () {
     function SimpleGame() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: this.preload, create: this.create, update: this.update, collectStar: this.collectStar });
+        this.game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: this.preload, create: this.create, update: this.update, collectStar: this.collectStar, playRunningAnimation: this.playRunningAnimation });
     }
     SimpleGame.prototype.preload = function () {
         this.game.load.image('sky', './assets/sky.png');
         this.game.load.image('ground', './assets/platform.png');
         this.game.load.image('star', './assets/star.png');
-        this.game.load.spritesheet('dude', './assets/dude.png', 32, 48);
+        this.game.load.atlasJSONHash('alucard', './assets/alucard.png', './assets/alucard.json');
     };
     SimpleGame.prototype.create = function () {
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -20,13 +20,13 @@ var SimpleGame = (function () {
         ledge.body.immovable = true;
         ledge = this.platforms.create(-150, 250, 'ground');
         ledge.body.immovable = true;
-        this.player = this.game.add.sprite(32, this.game.world.height - 150, 'dude');
+        this.player = this.game.add.sprite(37, this.game.world.height - 150, 'alucard');
         this.game.physics.arcade.enable(this.player);
-        this.player.body.bounce.y = 0.2;
         this.player.body.gravity.y = 300;
         this.player.body.collideWorldBounds = true;
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.player.animations.add('run', Phaser.Animation.generateFrameNames('alucard/run', 15, 30, '', 2), 20, true);
+        this.player.animations.add('startRunning', Phaser.Animation.generateFrameNames('template', 0, 14, '', 2), 20, true);
+        //startRunningAnimation.onComplete.add(this.playRunningAnimation, this);
         this.stars = this.game.add.group();
         this.stars.enableBody = true;
         for (var i = 0; i < 12; i++) {
@@ -43,26 +43,34 @@ var SimpleGame = (function () {
         this.score += 10;
         this.scoreText.text = 'Score: ' + this.score;
     };
+    SimpleGame.prototype.playRunningAnimation = function (sprite, animation) {
+        console.log('stiga');
+        this.player.animations.play('run');
+    };
     SimpleGame.prototype.update = function () {
         this.game.physics.arcade.collide(this.player, this.platforms);
         this.game.physics.arcade.collide(this.stars, this.platforms);
         this.game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
         this.player.body.velocity.x = 0;
         if (this.cursors.left.isDown) {
+            this.player.scale.setTo(-1, 1);
             this.player.body.velocity.x = -150;
-            this.player.animations.play('left');
+            this.player.animations.play('run');
         }
         else if (this.cursors.right.isDown) {
+            this.player.scale.setTo(1, 1);
             this.player.body.velocity.x = 150;
-            this.player.animations.play('right');
+            this.player.animations.stop();
+            this.player.animations.play('startRunning');
         }
         else {
             this.player.animations.stop();
-            this.player.frame = 4;
         }
-        //  Allow the player to jump if they are touching the ground.
         if (this.cursors.up.isDown && this.player.body.touching.down) {
             this.player.body.velocity.y = -350;
+        }
+        if (this.cursors.down.isDown && !this.player.body.touching.down) {
+            this.player.body.velocity.y = 350;
         }
     };
     return SimpleGame;
