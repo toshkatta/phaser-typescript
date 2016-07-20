@@ -98,7 +98,7 @@
     hitEnemy(player, enemy): void {
         player.kill();
         this.scoreText.text = "YOU DIED";
-        this.game.state.restart();
+        setTimeout(() => this.game.state.restart(), 3000);
     }
 
     moveEnemies(): void {
