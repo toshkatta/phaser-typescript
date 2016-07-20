@@ -10,11 +10,10 @@
         this.game.load.image('sky', './assets/sky.png');
         this.game.load.image('ground', './assets/platform.png');
         this.game.load.image('star', './assets/star.png');
-        this.game.load.atlasJSONHash('alucard', './assets/alucard.png', './assets/alucard.json');
+        this.game.load.atlas('alucard', './assets/player.png', './assets/player.json');
     }
 
     player: Phaser.Sprite;
-    runningPlayer: Phaser.Sprite;
     platforms: Phaser.Group;
     cursors: Phaser.CursorKeys;
     stars: Phaser.Group;
@@ -25,7 +24,6 @@
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.game.add.sprite(0, 0, 'sky');
-
         this.platforms = this.game.add.group();
         this.platforms.enableBody = true;
         let ground = this.platforms.create(0, this.game.world.height - 64, 'ground');
@@ -39,11 +37,14 @@
         this.player = this.game.add.sprite(37, this.game.world.height - 150, 'alucard');
         this.game.physics.arcade.enable(this.player);
         this.player.body.gravity.y = 300;
-
+        //(this.player.body as Phaser.Physics.Arcade.Body).width /= 2;
         this.player.body.collideWorldBounds = true;
-        this.player.animations.add('run', Phaser.Animation.generateFrameNames('alucard/run', 15, 30, '', 2), 20, true);
-        this.player.animations.add('startRunning', Phaser.Animation.generateFrameNames('template', 0, 14, '', 2), 20, true);
-        //startRunningAnimation.onComplete.add(this.playRunningAnimation, this);
+
+        let startFrames = Phaser.Animation.generateFrameNames('template_', 1, 15, '.png', 2);
+        let runFrames = Phaser.Animation.generateFrameNames('template_', 16, 31, '.png', 2);
+        this.player.animations.add('run', runFrames, 20, true);
+        let startRunningAnimation = this.player.animations.add('startRunning', startFrames, 20, false);
+        startRunningAnimation.onComplete.add(this.playRunningAnimation, this);
 
         this.stars = this.game.add.group();
         this.stars.enableBody = true;
@@ -68,7 +69,8 @@
 
     playRunningAnimation(sprite, animation) {
         console.log('stiga')
-        this.player.animations.play('run');        
+        sprite.animations.stop();
+        sprite.animations.play('run');        
     }
 
     update() {
@@ -87,9 +89,7 @@
         else if (this.cursors.right.isDown) {
             this.player.scale.setTo(1, 1);
             this.player.body.velocity.x = 150;
-            this.player.animations.stop();
             this.player.animations.play('startRunning');
-            //this.player.animations.play('run');
         }
         else {
             this.player.animations.stop();

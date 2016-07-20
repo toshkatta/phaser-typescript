@@ -23,13 +23,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="assets\alucard.png" />
     <Content Include="assets\baddie.png" />
     <Content Include="assets\diamond.png" />
     <Content Include="assets\dude.png" />
     <Content Include="assets\firstaid.png" />
     <Content Include="assets\platform.png" />
+    <Content Include="assets\player.png" />
     <Content Include="assets\sky.png" />
     <Content Include="assets\star.png" />
+    <Content Include="assets\template.png" />
     <Content Include="index.html" />
     <Content Include="phaser\phaser.js" />
     <Content Include="phaser\phaser.min.js" />
@@ -44,6 +47,7 @@
     <TypeScriptCompile Include="phaser\pixi.d.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\alucard.json" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
